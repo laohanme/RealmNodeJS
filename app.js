@@ -5,7 +5,7 @@ const app = new express.Router();
 app.get("/user/read", (request, response) => {
     let query = request.query;
     response.setHeader("Content-Type", "application/json");
-    user.read(query)
+    user.readUser(query)
         .then((result) => {
             response.send({
                 status: "success",
@@ -44,7 +44,7 @@ app.post("/user/add", (request, response) => {
 app.put("/user/update", (request, response) => {
     let body = request.body;
     response.setHeader("Content-Type", "application/json");
-    user.update(body)
+    user.updateUser(body)
         .then((result) => {
             response.send({
                 status: "success",

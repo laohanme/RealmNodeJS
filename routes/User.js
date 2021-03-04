@@ -13,14 +13,12 @@ const createUser = (data) =>
         Realm.open(option)
             .then((realm) => {
                 let filter = realm.objects(name).filtered(`_id=${data._id}`);
-                if (!filter.length > 0) {
-                    realm.write(() => {
-                        realm.create(name, data);
-                        resolve(data);
-                    });
-                } else {
-                    reject(`sorry, ${data.name} is exist`);
-                }
+                !filter.length > 0
+                    ? realm.write(() => {
+                          realm.create(name, data);
+                          resolve(data);
+                      })
+                    : reject(`sorry, ${data.name} is exist`);
             })
             .catch((error) => {
                 reject(error);
@@ -28,16 +26,18 @@ const createUser = (data) =>
     });
 
 // read
-const read = (data) =>
+const readUser = (data) =>
     new Promise((resolve, reject) => {
         Realm.open(option)
             .then((realm) => {
                 if (data._id != null) {
-                    let one = realm.objects(name).filtered(`_id=${data._id}`);
-                    resolve(one);
+                    let getOne = realm
+                        .objects(name)
+                        .filtered(`_id=${data._id}`);
+                    resolve(getOne);
                 } else {
-                    let all = realm.objects(name);
-                    resolve(all);
+                    let getAll = realm.objects(name);
+                    resolve(getAll);
                 }
             })
             .catch((error) => {
@@ -46,7 +46,7 @@ const read = (data) =>
     });
 
 // update
-const update = (data) =>
+const updateUser = (data) =>
     new Promise((resolve, reject) => {
         Realm.open(option)
             .then((realm) => {
@@ -55,6 +55,7 @@ const update = (data) =>
                         name,
                         Number(data._id)
                     );
+
                     if (!find) {
                         reject("User not found");
                         return;
@@ -80,10 +81,12 @@ const deleteUser = (data) =>
                         name,
                         Number(data._id)
                     );
+
                     if (!find) {
                         reject("User not found");
                         return;
                     }
+
                     realm.delete(find);
                     resolve();
                 });
@@ -95,7 +98,7 @@ const deleteUser = (data) =>
 
 module.exports = {
     createUser,
-    read,
-    update,
+    readUser,
+    updateUser,
     deleteUser,
 };
