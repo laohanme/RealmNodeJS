@@ -1,80 +1,35 @@
 const express = require("express");
-const user = require("./routes/User");
-const app = new express.Router();
+const route = require("./routes/index");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc")
 
-app.get("/user/read", (request, response) => {
-    let query = request.query;
-    response.setHeader("Content-Type", "application/json");
-    user.readUser(query)
-        .then((result) => {
-            response.send({
-                status: "success",
-                data: result,
-                total: result.length,
-            });
-        })
-        .catch((error) => {
-            response.send({
-                status: "failed",
-                message: `${error}`,
-            });
-        });
+const app = express();
+const portNumber = 3000;
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: "Project Y",
+            version: "1.0.0",
+        },
+    },
+    apis: ["./routes/*"],
+};
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(route);
+
+
+app.listen(portNumber, function () {
+    console.log("listening on port " + portNumber + "!");
+    console.log(
+        "\n\nGo to your browser and type this: http://localhost:" + portNumber
+    );
 });
-
-app.post("/user/add", (request, response) => {
-    let header = request.headers;
-    let body = request.body;
-    response.setHeader("Content-Type", "application/json");
-
-    user.createUser(body)
-        .then((result) => {
-            response.send({
-                status: "success",
-                data: result,
-            });
-        })
-        .catch((error) => {
-            response.send({
-                status: "failed",
-                message: `${error}`,
-            });
-        });
-});
-
-app.put("/user/update", (request, response) => {
-    let body = request.body;
-    response.setHeader("Content-Type", "application/json");
-    user.updateUser(body)
-        .then((result) => {
-            response.send({
-                status: "success",
-                data: result,
-            });
-        })
-        .catch((error) => {
-            response.send({
-                status: "failed",
-                message: `${error}`,
-            });
-        });
-});
-
-app.delete("/user/delete", (request, response) => {
-    let body = request.body;
-    response.setHeader("Content-Type", "application/json");
-    user.deleteUser(body)
-        .then((result) => {
-            response.send({
-                status: "success",
-                data: result,
-            });
-        })
-        .catch((error) => {
-            response.send({
-                status: "failed",
-                message: `${error}`,
-            });
-        });
-});
-
-module.exports = app;

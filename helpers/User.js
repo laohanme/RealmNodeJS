@@ -3,7 +3,7 @@ const Promise = require("promise");
 const { UserModel } = require("../models/models");
 
 // Database Option
-const name = "User";
+const collection = "User";
 const option = { path: "projectyDB", schema: [UserModel], schemaVersion: 1 };
 
 // CRUD
@@ -12,10 +12,10 @@ const createUser = (data) =>
     new Promise((resolve, reject) => {
         Realm.open(option)
             .then((realm) => {
-                let filter = realm.objects(name).filtered(`_id=${data._id}`);
+                let filter = realm.objects(collection).filtered(`_id=${data._id}`);
                 !filter.length > 0
                     ? realm.write(() => {
-                          realm.create(name, data);
+                          realm.create(collection, data);
                           resolve(data);
                       })
                     : reject(`sorry, ${data.name} is exist`);
@@ -36,7 +36,7 @@ const readUser = (data) =>
                         .filtered(`_id=${data._id}`);
                     resolve(getOne);
                 } else {
-                    let getAll = realm.objects(name);
+                    let getAll = realm.objects(collection);
                     resolve(getAll);
                 }
             })
@@ -52,7 +52,7 @@ const updateUser = (data) =>
             .then((realm) => {
                 realm.write(() => {
                     let find = realm.objectForPrimaryKey(
-                        name,
+                        collection,
                         Number(data._id)
                     );
 
@@ -78,7 +78,7 @@ const deleteUser = (data) =>
             .then((realm) => {
                 realm.write(() => {
                     let find = realm.objectForPrimaryKey(
-                        name,
+                        collection,
                         Number(data._id)
                     );
 
