@@ -1,14 +1,14 @@
-const collection = "User";
+const collection = 'User';
 
 // Schema
 const UserSchema = {
     name: collection,
     properties: {
-        _id: "int",
-        name: "string",
-        age: "string?",
+        _id: 'int',
+        name: 'string',
+        age: 'string?',
     },
-    primaryKey: "_id",
+    primaryKey: '_id',
 };
 
 // class User {

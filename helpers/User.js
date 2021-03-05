@@ -1,10 +1,10 @@
-const Realm = require("realm");
-const Promise = require("promise");
-const { UserModel } = require("../models/models");
+const Realm = require('realm');
+const Promise = require('promise');
+const { UserModel } = require('../models/models');
 
 // Database Option
-const collection = "User";
-const option = { path: "projectyDB", schema: [UserModel], schemaVersion: 1 };
+const collection = 'User';
+const option = { path: 'projectyDB', schema: [UserModel], schemaVersion: 1 };
 
 // CRUD
 // create
@@ -49,13 +49,10 @@ const updateUser = (data) =>
         Realm.open(option)
             .then((realm) => {
                 realm.write(() => {
-                    let find = realm.objectForPrimaryKey(
-                        collection,
-                        Number(data._id)
-                    );
+                    let find = realm.objectForPrimaryKey(collection, Number(data._id));
 
                     if (!find) {
-                        reject("User not found");
+                        reject('User not found');
                         return;
                     }
 
@@ -75,17 +72,8 @@ const deleteUser = (data) =>
         Realm.open(option)
             .then((realm) => {
                 realm.write(() => {
-                    let find = realm.objectForPrimaryKey(
-                        collection,
-                        Number(data._id)
-                    );
-
-                    if (!find) {
-                        reject("User not found");
-                        return;
-                    }
-                    
-                    realm.delete(find);
+                    let find = realm.objectForPrimaryKey(collection, Number(data._id));
+                    find ? realm.delete(find) : reject('User not found');
                     resolve();
                 });
             })
