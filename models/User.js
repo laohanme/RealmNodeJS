@@ -1,8 +1,8 @@
-const name = "User";
+const collection = "User";
 
 // Schema
 const UserSchema = {
-    name: name,
+    name: collection,
     properties: {
         _id: "int",
         name: "string",
@@ -13,7 +13,7 @@ const UserSchema = {
 
 // class User {
 //     static schema = {
-//         name: name,
+//         name: collection,
 //         properties: {
 //             _id: "int",
 //             name: "string",

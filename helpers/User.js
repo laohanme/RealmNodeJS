@@ -30,10 +30,8 @@ const readUser = (data) =>
     new Promise((resolve, reject) => {
         Realm.open(option)
             .then((realm) => {
-                if (data._id != null) {
-                    let getOne = realm
-                        .objects(name)
-                        .filtered(`_id=${data._id}`);
+                if (data._id) {
+                    let getOne = realm.objects(collection).filtered(`_id=${data._id}`);
                     resolve(getOne);
                 } else {
                     let getAll = realm.objects(collection);
@@ -86,7 +84,7 @@ const deleteUser = (data) =>
                         reject("User not found");
                         return;
                     }
-
+                    
                     realm.delete(find);
                     resolve();
                 });
